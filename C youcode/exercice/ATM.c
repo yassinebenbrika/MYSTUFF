@@ -6,7 +6,7 @@ int main()
     char continueChoice;
     int password = 1234; // Default password
     int enteredPassword;
-    printf("Welcome to Barid Bank ATM\n");
+    printf("Welcome to XYZ Bank ATM\n");
     printf("Please enter the initial password: ");
     scanf("%d", &password);
     do
@@ -75,3 +75,5 @@ int main()
     } while (choice != 5 && (continueChoice == 'y' || continueChoice == 'Y'));
     return 0;
 }
+
+
