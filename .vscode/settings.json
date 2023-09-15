@@ -1,5 +1,17 @@
 {
     "files.associations": {
-        "exercice09.C": "cpp"
-    }
+        "exercice09.C": "cpp",
+        "exercice08.C": "cpp",
+        "exercice02.C": "cpp",
+        "exercice10.C": "cpp",
+        "exercice03.C": "cpp",
+        "exercice04.C": "cpp",
+        "exercice05.C": "cpp",
+        "exercice07.C": "cpp",
+        "exercice.C": "cpp",
+        "tempCodeRunnerFile.C": "cpp",
+        "exercice11.C": "cpp",
+        "bruh.C": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
