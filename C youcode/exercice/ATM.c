@@ -2,7 +2,7 @@
 #include <stdbool.h> // Include this header for boolean data type
 int main()
 {
-    int choice, balance = 1000, withdraw, deposit;
+    int choice, balance = 0, withdraw, deposit;
     char continueChoice;
     int password = 1234; // Default password
     int enteredPassword;
