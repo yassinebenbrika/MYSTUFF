@@ -1,19 +1,23 @@
 #include <stdio.h>
 
 int main() {
-    int f, n, i, check = 0;
+    int  i,n,check = 1;
+    printf("enter a number : ");
+    scanf("%d",&n);
+    for ( i = 2; i <= n/2; i++)
+    {
+        if (n%i==0){
+            check=0;
+            break;
+            }
+        }
+        if (check==1)
+        {
+            printf("this number is prime");
+        }
+        else 
+        printf("this number isn't prime ");
 
-    printf("Enter the value of n: ");
-    scanf("%d", &n);
-
-    while (n <= 0) {
-        printf("Incorrect value\n");
-        printf("Enter the value of n: ");
-        scanf("%d", &n);
+     return 0;      
     }
-    for(i=2;i<=n/2;i++){
-        
-    }
-    }
-
-    return 0;
+    
