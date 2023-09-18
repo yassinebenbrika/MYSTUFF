@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 int main() {
-    int i, N[5], temp;
+  int i, N[5], temp;
     bool permut;
 
     

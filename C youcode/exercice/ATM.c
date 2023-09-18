@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdbool.h> // Include this header for boolean data type
+#include <stdbool.h> 
 int main()
 {
     int choice, balance = 0, withdraw, deposit;
     char continueChoice;
-    int password = 1234; // Default password
+    int password = 1234; 
     int enteredPassword;
     printf("Welcome to Barid Bank ATM\n");
     printf("Please enter the initial password: ");
@@ -22,11 +22,9 @@ int main()
         switch (choice)
         {
         case 1:
-            // Implement balance inquiry logic
             printf("Your balance is %d\n", balance);
             break;
         case 2:
-            // Implement withdrawal logic
             printf("How much do you want to withdraw?\n");
             scanf("%d", &withdraw);
             if (withdraw <= balance)
@@ -47,7 +45,6 @@ int main()
             printf("Deposit successful. Updated balance: %d\n", balance);
             break;
         case 4:
-            // Implement password change logic
             printf("Enter the current password: ");
             scanf("%d", &enteredPassword);
             if (enteredPassword == password)
