@@ -1,17 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
-
-int main() {
-  int i,n, temp;
-    bool permut;
-printf("how many number do you want to sort :");
-scanf("%d",&n);
-     int N[n];
-    for ( i = 0; i < n; i++) {
-        printf("Enter a number: ");
-        scanf("%d", &N[i]);
-}
-    do{
+void check(int i,int n,int N[n]){
+     
+       do{
     permut=false;
  for( i=0;i<n-1;i++){
        if(N[i]>N[i+1]){
@@ -23,6 +14,21 @@ scanf("%d",&n);
        
     }
 }while(permut);
+
+}
+void search(){
+    
+}
+int main() {
+  int i,n, temp;
+    bool permut;
+printf("how many number do you want to sort :");
+scanf("%d",&n);
+     int N[n];
+    for ( i = 0; i < n; i++) {
+        printf("Enter a number: ");
+        scanf("%d", &N[i]);
+}
 
 
 
