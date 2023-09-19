@@ -15,7 +15,8 @@
         "exercice12.C": "cpp",
         "exercice19.C": "cpp",
         "exercice23.C": "cpp",
-        "exercice06.C": "cpp"
+        "exercice06.C": "cpp",
+        "bulle and baniry search": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
