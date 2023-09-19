@@ -33,7 +33,7 @@ int linearSearch() {
 }
 
 int main() {
-
+    do {
         printf("How many numbers do you want to sort: ");
         scanf("%d", &n);
 
@@ -41,7 +41,7 @@ int main() {
             printf("Enter a number: ");
             scanf("%d", &N[i]);
         }
-    do {
+
         printf("1 - Sort the array\n");
         printf("2 - Search for an element's index\n");
         printf("Enter your choice: ");
