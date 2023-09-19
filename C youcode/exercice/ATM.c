@@ -1,76 +1,88 @@
 #include <stdio.h>
-#include <stdbool.h> 
-int main()
-{
-    int choice, balance = 0, withdraw, deposit;
-    char continueChoice;
-    int password = 1234; 
-    int enteredPassword;
-    printf("Welcome to Barid Bank ATM\n");
-    printf("Please enter the initial password: ");
-    scanf("%d", &password);
-    do
-    {
-        printf("\nMenu:\n");
-        printf("1. Balance Inquiry\n");
-        printf("2. Withdrawal\n");
-        printf("3. Deposit\n");
-        printf("4. Change Password\n");
-        printf("5. Exit\n");
-        printf("Please enter your choice: ");
-        scanf("%d", &choice);
-        switch (choice)
-        {
-        case 1:
-            printf("Your balance is %d\n", balance);
-            break;
-        case 2:
-            printf("How much do you want to withdraw?\n");
-            scanf("%d", &withdraw);
-            if (withdraw <= balance)
-            {
-                balance -= withdraw;
-                printf("Withdrawal successful. Your balance is: %d\n", balance);
+#include <stdbool.h>
+char continueChoice;
+int choose;
+int n;
+int target;
+int N[100];
+
+void bubbleSort() {
+    bool permut;
+    int temp;
+    do {
+        permut = false;
+        for (int i = 0; i < n - 1; i++) {
+            if (N[i] > N[i + 1]) {
+                temp = N[i];
+                N[i] = N[i + 1];
+                N[i + 1] = temp;
+                permut = true;
             }
-            else
-            {
-                printf("Insufficient balance.\n");
-            }
-            break;
-        case 3:
-            // Implement deposit logic
-            printf("How much do you want to deposit?\n");
-            scanf("%d", &deposit);
-            balance += deposit;
-            printf("Deposit successful. Updated balance: %d\n", balance);
-            break;
-        case 4:
-            printf("Enter the current password: ");
-            scanf("%d", &enteredPassword);
-            if (enteredPassword == password)
-            {
-                printf("Enter the new password: ");
-                scanf("%d", &password);
-                printf("Password changed successfully.\n");
-            }
-            else
-            {
-                printf("Incorrect password. Password change failed.\n");
-            }
-            break;
-        case 5:
-            printf("Thank you for using XYZ Bank ATM. Goodbye!\n");
-            break;
-        default:
-            printf("Invalid choice. Please enter a valid option.\n");
         }
-        if (choice != 5)
-        {
-            printf("Do you want to continue (y/n)? ");
-            scanf(" %c", &continueChoice);
-        }
-    } while (choice != 5 && (continueChoice == 'y' || continueChoice == 'Y'));
-    return 0;
+    } while (permut);
 }
 
+int linearSearch() {
+    for (int i = 0; i < n; i++) {
+        if (N[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}
 
+int main() {
+   
+    do
+    {   
+    printf("How many numbers do you want to sort: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter a number: ");
+        scanf("%d", &N[i]);
+
+    }
+    printf("1-sorted arrays\n");
+    printf("2-searche about index\n");
+    printf("enter your choose :");
+    scanf("%d",&choose);
+
+switch (choose)
+{
+case 1:
+ bubbleSort();
+
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", N[i]);
+    }
+    printf("\n");
+    break;
+case 2:
+       printf("Enter a number to search for: ");
+    scanf("%d", &target);
+
+    int index = linearSearch();
+
+    if (index != -1) {
+        printf("Element %d found at index %d\n", target, index);
+    } else {
+        printf("Element %d not found in the array\n", target);
+    }
+    
+default:
+        printf("Invalid choice. Please enter a valid option.\n");
+    break;
+}
+    
+        printf("Do you want to continue (y/n)? ");
+            scanf(" %c", &continueChoice);
+   
+             } while (continueChoice=='y'|| continueChoice=='Y');
+    return 0;
+        
+
+   
+    
+}

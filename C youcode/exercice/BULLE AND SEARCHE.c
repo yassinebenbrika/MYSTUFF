@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
-
+char continuechoose;
+int choose;
 int n;
 int target;
 int N[100];
@@ -31,23 +32,35 @@ int linearSearch() {
 }
 
 int main() {
+   
+    do
+    {   
     printf("How many numbers do you want to sort: ");
     scanf("%d", &n);
 
     for (int i = 0; i < n; i++) {
         printf("Enter a number: ");
         scanf("%d", &N[i]);
-    }
 
-    bubbleSort();
+    }
+    printf("1-sorted arrays\n");
+    printf("2-searche about index\n");
+    printf("enter your choose :");
+    scanf("%d",&choose);
+
+switch (choose)
+{
+case 1:
+ bubbleSort();
 
     printf("Sorted array: ");
     for (int i = 0; i < n; i++) {
         printf("%d ", N[i]);
     }
     printf("\n");
-
-    printf("Enter a number to search for: ");
+    break;
+case 2:
+       printf("Enter a number to search for: ");
     scanf("%d", &target);
 
     int index = linearSearch();
@@ -57,6 +70,20 @@ int main() {
     } else {
         printf("Element %d not found in the array\n", target);
     }
+    printf("Do you want to continue (y/n)? ");
+            scanf(" %c", &choose);
 
+default:
+        printf("Invalid choice. Please enter a valid option.\n");
+    break;
+}
+    
+
+   
+             } while (continuechoose=='y'|| continuechoose=='Y')
     return 0;
+        
+
+   
+    
 }
