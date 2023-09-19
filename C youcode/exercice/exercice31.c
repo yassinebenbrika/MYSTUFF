@@ -13,7 +13,7 @@ int main() {
 
     do {
         permut = false;
-        for (i = 0; i < 5 - 1; i++) {
+        for (i = 0; i < 5 ; i++) {
             if (N[i] > N[i + 1]) {
                 temp = N[i];
                 N[i] = N[i + 1];
