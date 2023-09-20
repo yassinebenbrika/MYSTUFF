@@ -113,7 +113,7 @@ void displayTasksByDeadline(struct Task tasks[], int numTasks) {
     }
 }
 
-/bool isNearDeadline(const char deadline[]) {
+bool isNearDeadline(const char deadline[]) {
     struct tm current_tm;
     struct tm task_tm;
 
@@ -173,12 +173,12 @@ void modifyTask(struct Task tasks[], int numTasks) {
     switch (choice) {
         case 1:
             printf("Enter the new description: ");
-            scanf(" %[^\n]", tasks[taskIndex].description);
+            scanf(" %s[^\n]", tasks[taskIndex].description);
             printf("Description updated.\n");
             break;
         case 2:
             printf("Enter the new status: ");
-            scanf(" %[^\n]", tasks[taskIndex].status);
+            scanf(" %s[^\n]", tasks[taskIndex].status);
             printf("Status updated.\n");
             break;
         case 3:
@@ -259,7 +259,7 @@ void searchTasks(struct Task tasks[], int numTasks) {
         case 2: {
             char searchTitle[100];
             printf("Enter the title of the task you want to search for: ");
-            scanf(" %[^\n]", searchTitle);
+            scanf(" %s[^\n]", searchTitle);
 
             bool found = false;
             for (int i = 0; i < numTasks; i++) {
@@ -374,8 +374,8 @@ int main() {
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
-        }
-    } while (choice != 9);
+        
+    }} while (choice != 9);
 
-    return 0;
-}
+    return 0;}
+
