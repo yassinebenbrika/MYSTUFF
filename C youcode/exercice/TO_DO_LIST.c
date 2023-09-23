@@ -4,9 +4,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-// Maximum number of tasks
-
-
 // Structure to represent a task
 struct Task {
     int id;
@@ -18,23 +15,24 @@ struct Task {
 
 // Function to display the menu options
 void displayMenu() {
-    printf("==== To-Do List Menu ====\n");
-    printf("1. Add a new task\n");
-    printf("2. Display tasks\n");
-    printf("3. Modify a task\n");
-    printf("4. Delete a task by ID\n");
-    printf("5. Search for tasks\n");
-    printf("6. Display statistics\n");
-    printf("7. Exit\n");
+     printf("\n=================================================\n");
+    printf("\t\t\t\tTo-Do List Menu           \n");
+    printf("=================================================\n");
+    printf("\t\t\t\t1. Add a new task\n");
+    printf("\t\t\t\t2. Display tasks\n");
+    printf("\t\t\t\t3. Modify a task\n");
+    printf("\t\t\t\t4. Delete a task by ID\n");
+    printf("\t\t\t\t5. Search for tasks\n");
+    printf("\t\t\t\t6. Display statistics\n");
+    printf("\t\t\t\t7. Exit\n");
+    printf("=================================================\n");
     printf("Enter your choice: ");
 }
 
 // Function to add a new task
-// Function to add a new task
-
 int addTask(struct Task tasks[], int numTasks) {
     char continueInput;
-    
+
     do {
         if (numTasks >= 100) {
             printf("Maximum number of tasks reached.\n");
@@ -61,7 +59,7 @@ int addTask(struct Task tasks[], int numTasks) {
         printf("2. En cours de réalisation\n");
         printf("3. Finalisée\n");
         printf("Enter your choice: ");
-        
+
         int statusChoice;
         scanf("%d", &statusChoice);
 
@@ -79,7 +77,7 @@ int addTask(struct Task tasks[], int numTasks) {
                 printf("Invalid choice.\n");
                 return numTasks; // Return without adding the task
         }
-        
+
         printf("Adding task successfully.\n");
 
         numTasks++; // Increment the task count
@@ -91,7 +89,6 @@ int addTask(struct Task tasks[], int numTasks) {
 
     return numTasks; // Return the updated task count
 }
-
 
 // Function to display all tasks sorted by title
 void displayTasksByTitle(struct Task tasks[], int numTasks) {
@@ -155,29 +152,89 @@ void displayTasksByDeadline(struct Task tasks[], int numTasks) {
     }
 }
 
-bool isNearDeadline(const char deadline[]) {
-    struct tm current_tm;
-    struct tm task_tm;
+// Function to modify a task by ID
+void modifyTask(struct Task tasks[], int numTasks) {
+    int taskId;
+    printf("Enter the ID of the task to modify: ");
+    scanf("%d", &taskId);
 
-    time_t current_time = time(NULL);
-    current_tm = *localtime(&current_time);
+    int taskIndex = -1;
 
-    int task_year, task_month, task_day;
-    sscanf(deadline, "%d-%d-%d", &task_year, &task_month, &task_day);
-    task_tm.tm_year = task_year - 1900;
-    task_tm.tm_mon = task_month - 1;
-    task_tm.tm_mday = task_day;
+    // Find the task with the given ID
+    for (int i = 0; i < numTasks; i++) {
+        if (tasks[i].id == taskId) {
+            taskIndex = i;
+            break;
+        }
+    }
 
-    int days_difference = 0;
+    if (taskIndex != -1) {
+        int modifyChoice;
 
-    time_t current_seconds = mktime(&current_tm);
-    time_t task_seconds = mktime(&task_tm);
+        printf("Modifying task with ID %d:\n", taskId);
 
-    days_difference = (int)difftime(task_seconds, current_seconds) / (60 * 60 * 24);
+        // Display current task details
+        printf("Current Title: %s\n", tasks[taskIndex].title);
+        printf("Current Description: %s\n", tasks[taskIndex].description);
+        printf("Current Deadline: %s\n", tasks[taskIndex].deadline);
+        printf("Current Status: %s\n", tasks[taskIndex].status);
 
-    return (days_difference <= 3 && days_difference >= 0);
+        printf("Enter the number to modify:\n");
+        printf("1. Title\n");
+        printf("2. Description\n");
+        printf("3. Deadline\n");
+        printf("4. Status\n");
+        printf("Enter your choice: ");
+        scanf("%d", &modifyChoice);
+
+        switch (modifyChoice) {
+            case 1:
+                printf("Enter new Title: ");
+                scanf(" %[^\n]", tasks[taskIndex].title);
+                break;
+            case 2:
+                printf("Enter new Description: ");
+                scanf(" %[^\n]", tasks[taskIndex].description);
+                break;
+            case 3:
+                printf("Enter new Deadline (YYYY-MM-DD): ");
+                scanf("%s", tasks[taskIndex].deadline);
+                break;
+            case 4:
+                printf("Enter new Status:\n");
+                printf("1. À réaliser\n");
+                printf("2. En cours de réalisation\n");
+                printf("3. Finalisée\n");
+                printf("Enter your choice: ");
+                int statusChoice;
+                scanf("%d", &statusChoice);
+                switch (statusChoice) {
+                    case 1:
+                        strcpy(tasks[taskIndex].status, "À réaliser");
+                        break;
+                    case 2:
+                        strcpy(tasks[taskIndex].status, "En cours de réalisation");
+                        break;
+                    case 3:
+                        strcpy(tasks[taskIndex].status, "Finalisée");
+                        break;
+                    default:
+                        printf("Invalid choice.\n");
+                        return; // Return without modifying the task
+                }
+                break;
+            default:
+                printf("Invalid choice.\n");
+                return; // Return without modifying the task
+        }
+
+        printf("Task with ID %d modified successfully.\n", taskId);
+    } else {
+        printf("Task with ID %d not found.\n", taskId);
+    }
 }
 
+// Function to delete a task by ID
 int deleteTask(struct Task tasks[], int numTasks) {
     int taskId;
     printf("Enter the ID of the task to delete: ");
@@ -223,7 +280,7 @@ void searchTasks(struct Task tasks[], int numTasks) {
             int taskId;
             printf("Enter the ID of the task you want to search for: ");
             scanf("%d", &taskId);
-            
+
             bool found = false;
             for (int i = 0; i < numTasks; i++) {
                 if (tasks[i].id == taskId) {
@@ -272,7 +329,7 @@ void searchTasks(struct Task tasks[], int numTasks) {
 }
 
 int main() {
-    struct Task tasks[100]; // Assuming a maximum of 100 tasks
+    struct Task tasks[100];
     int numTasks = 0;
     int choice;
 
@@ -303,7 +360,7 @@ int main() {
                 break;
             }
             case 3:
-                printf("Modify a task: Not implemented yet.\n");
+                modifyTask(tasks, numTasks); // Call the modifyTask function
                 break;
             case 4:
                 numTasks = deleteTask(tasks, numTasks);
