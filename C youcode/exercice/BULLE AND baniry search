@@ -1,89 +1,197 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
-char continueChoice;
-int choose;
-int n;
-int target;
-int N[100];
+// Structure to represent a task
+struct Task {
+    int id;
+    char title[100];
+    char description[500];
+    char deadline[20]; // Format: YYYY-MM-DD
+    char status[50];
+};
 
-void bubbleSort() {
-    bool permut;
-    int temp;
-    do {
-        permut = false;
-        for (int i = 0; i < n - 1; i++) {
-            if (N[i] > N[i + 1]) {
-                temp = N[i];
-                N[i] = N[i + 1];
-                N[i + 1] = temp;
-                permut = true;
-            }
-        }
-    } while (permut);
+// Function to display the menu options
+void displayMenu() {
+    printf("==== To-Do List Menu ====\n");
+    printf("1. Add a new task\n");
+    printf("2. Display all tasks (sorted by title)\n");
+    printf("3. Display all tasks (sorted by deadline)\n");
+    printf("4. Display tasks with a deadline in 3 days or less\n");
+    printf("5. Modify a task\n");
+    printf("6. Delete a task by ID\n");
+    printf("7. Search for tasks\n");
+    printf("8. Display statistics\n");
+    printf("9. Exit\n");
+    printf("Enter your choice: ");
 }
 
-int binarySearch(int target) {
-    int start_index = 0, end_index = n - 1;
-    while (start_index <= end_index) {
-        int mid_index = start_index + ((end_index - start_index) / 2);
-        if (N[mid_index] == target) {
-            return mid_index;
-        } else if (N[mid_index] < target) {
-            start_index = mid_index + 1;
-        } else {
-            end_index = mid_index - 1;
+// Function to add a new task and return the updated number of tasks
+int addTask(struct Task tasks[], int numTasks) {
+    if (numTasks >= 100) {
+        printf("Task list is full. Cannot add more tasks.\n");
+        return numTasks;
+    }
+
+    printf("Enter task details:\n");
+
+    // Increment the ID for the new task
+    int newId = numTasks + 1;
+
+    // Set the task ID
+    tasks[numTasks].id = newId;
+
+    printf("Title: ");
+    scanf(" %[^\n]", tasks[numTasks].title); // Read until newline
+    printf("Description: ");
+    scanf(" %[^\n]", tasks[numTasks].description); // Read until newline
+    printf("Deadline (YYYY-MM-DD): ");
+    scanf("%s", tasks[numTasks].deadline);
+    printf("Status (e.g., 'à réaliser', 'en cours de réalisation', 'finalisée'): ");
+    scanf(" %[^\n]", tasks[numTasks].status); // Read until newline
+
+    numTasks++; // Increment the task count
+    printf("Task added successfully.\n");
+    return numTasks;
+}
+
+// Function to display all tasks sorted by title
+void displayTasksByTitle(struct Task tasks[], int numTasks) {
+    if (numTasks <= 0) {
+        printf("No tasks to display.\n");
+        return;
+    }
+
+    // Sort the tasks using a simple bubble sort algorithm based on titles
+    for (int i = 0; i < numTasks - 1; i++) {
+        for (int j = 0; j < numTasks - i - 1; j++) {
+            if (strcmp(tasks[j].title, tasks[j + 1].title) > 0) {
+                // Swap tasks[j] and tasks[j + 1]
+                struct Task temp;
+                temp = tasks[j];
+                tasks[j] = tasks[j + 1];
+                tasks[j + 1] = temp;
+            }
         }
     }
-    return -1;
+
+    printf("Tasks sorted by title:\n");
+    for (int i = 0; i < numTasks; i++) {
+        printf("ID: %d\n", tasks[i].id);
+        printf("Title: %s\n", tasks[i].title);
+        printf("Description: %s\n", tasks[i].description);
+        printf("Deadline: %s\n", tasks[i].deadline);
+        printf("Status: %s\n", tasks[i].status);
+        printf("\n");
+    }
+}
+
+// Function to display all tasks sorted by deadline
+void displayTasksByDeadline(struct Task tasks[], int numTasks) {
+    if (numTasks <= 0) {
+        printf("No tasks to display.\n");
+        return;
+    }
+
+    // Sort the tasks using a simple bubble sort algorithm based on deadlines
+    for (int i = 0; i < numTasks - 1; i++) {
+        for (int j = 0; j < numTasks - i - 1; j++) {
+            if (strcmp(tasks[j].deadline, tasks[j + 1].deadline) > 0) {
+                // Swap tasks[j] and tasks[j + 1]
+                struct Task temp;
+                temp = tasks[j];
+                tasks[j] = tasks[j + 1];
+                tasks[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("Tasks sorted by deadline:\n");
+    for (int i = 0; i < numTasks; i++) {
+        printf("ID: %d\n", tasks[i].id);
+        printf("Title: %s\n", tasks[i].title);
+        printf("Description: %s\n", tasks[i].description);
+        printf("Deadline: %s\n", tasks[i].deadline);
+        printf("Status: %s\n", tasks[i].status);
+        printf("\n");
+    }
+}
+
+bool isNearDeadline(const char deadline[]) {
+    struct tm current_tm;
+    struct tm task_tm;
+
+    time_t current_time = time(NULL);
+    current_tm = *localtime(&current_time);
+
+    int task_year, task_month, task_day;
+    sscanf(deadline, "%d-%d-%d", &task_year, &task_month, &task_day);
+    task_tm.tm_year = task_year - 1900;
+    task_tm.tm_mon = task_month - 1;
+    task_tm.tm_mday = task_day;
+
+    int days_difference = 0;
+
+    time_t current_seconds = mktime(&current_tm);
+    time_t task_seconds = mktime(&task_tm);
+
+    days_difference = (int)difftime(task_seconds, current_seconds) / (60 * 60 * 24);
+
+    return (days_difference <= 3 && days_difference >= 0);
 }
 
 int main() {
+    struct Task tasks[100]; // Assuming a maximum of 100 tasks
+    int numTasks = 0;
+    int choice;
+    char choice_display;
+
     do {
-        printf("How many numbers do you want to sort: ");
-        scanf("%d", &n);
+        displayMenu();
+        scanf("%d", &choice);
+        getchar(); // Consume newline character
 
-        for (int i = 0; i < n; i++) {
-            printf("Enter a number: ");
-            scanf("%d", &N[i]);
-        }
-
-        bubbleSort();  
-
-        printf("1 - Sort the array\n");
-        printf("2 - Search for an element's index\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choose);
-
-        switch (choose) {
+        switch (choice) {
             case 1:
-                printf("Sorted array: ");
-                for (int i = 0; i < n; i++) {
-                    printf("%d ", N[i]);
-                }
-                printf("\n");
+                numTasks = addTask(tasks, numTasks);
                 break;
-            case 2:
-                printf("Enter a number to search for: ");
-                scanf("%d", &target);
-
-                int index = binarySearch(target);
-
-                if (index != -1) {
-                    printf("Element %d found at index %d\n", target, index);
-                } else {
-                    printf("Element %d not found in the array\n", target);
-                }
+         case 2:
+           switch(choice_display){
+            case 'a':
+                displayTasksByTitle(tasks, numTasks);
+                break;
+            case 'b':
+                displayTasksByDeadline(tasks, numTasks);
+                break;
+            case 'c':
+               
+                printf("Tasks with a deadline in 3 days or less:\n");
+                for (int i = 0; i < numTasks; i++) {
+                    if (isNearDeadline(tasks[i].deadline)) {
+                        printf("ID: %d\n", tasks[i].id);
+                        printf("Title: %s\n", tasks[i].title);
+                        printf("Description: %s\n", tasks[i].description);
+                        printf("Deadline: %s\n", tasks[i].deadline);
+                        printf("Status: %s\n", tasks[i].status);
+                        printf("\n");
+                    }
+                    break;
+                
+                break;
+           
+               
+           }
+           
+            case 9:
+                printf("Exiting the program. Goodbye!\n");
                 break;
             default:
-                printf("Invalid choice. Please enter a valid option.\n");
-                break;
+                printf("Invalid choice. Please try again.\n");
         }
-
-        printf("Do you want to continue (y/n)? ");
-        scanf(" %c", &continueChoice);
-    } while (continueChoice == 'y' || continueChoice == 'Y');
+    } while (choice != 9);
 
     return 0;
 }
-²²²
+}
