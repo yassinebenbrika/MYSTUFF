@@ -4,18 +4,16 @@
 #include <stdbool.h>
 #include <time.h>
 
-// Structure to represent a task
 struct Task {
     int id;
     char title[100];
     char description[500];
-    char deadline[20]; // Format: YYYY-MM-DD
+    char deadline[20];
     char status[50];
 };
 
-// Function to display the menu options
 void displayMenu() {
-     printf("\n=================================================\n");
+    printf("\n=================================================\n");
     printf("\t\t\t\tTo-Do List Menu           \n");
     printf("=================================================\n");
     printf("\t\t\t\t1. Add a new task\n");
@@ -29,7 +27,6 @@ void displayMenu() {
     printf("Enter your choice: ");
 }
 
-// Function to add a new task
 int addTask(struct Task tasks[], int numTasks) {
     char continueInput;
 
@@ -41,16 +38,14 @@ int addTask(struct Task tasks[], int numTasks) {
 
         printf("Enter task details:\n");
 
-        // Increment the ID for the new task
         int newId = numTasks + 1;
 
-        // Set the task ID
         tasks[numTasks].id = newId;
 
         printf("Title: ");
-        scanf(" %[^\n]", tasks[numTasks].title); // Read until newline
+        scanf(" %[^\n]", tasks[numTasks].title);
         printf("Description: ");
-        scanf(" %[^\n]", tasks[numTasks].description); // Read until newline
+        scanf(" %[^\n]", tasks[numTasks].description);
         printf("Deadline (YYYY-MM-DD): ");
         scanf("%s", tasks[numTasks].deadline);
 
@@ -75,33 +70,30 @@ int addTask(struct Task tasks[], int numTasks) {
                 break;
             default:
                 printf("Invalid choice.\n");
-                return numTasks; // Return without adding the task
+                return numTasks;
         }
 
         printf("Adding task successfully.\n");
 
-        numTasks++; // Increment the task count
+        numTasks++;
 
         printf("Do you want to continue (y/n): ");
-        getchar(); // Consume the newline character
+        getchar();
         scanf("%c", &continueInput);
     } while (continueInput == 'y' || continueInput == 'Y');
 
-    return numTasks; // Return the updated task count
+    return numTasks;
 }
 
-// Function to display all tasks sorted by title
 void displayTasksByTitle(struct Task tasks[], int numTasks) {
     if (numTasks <= 0) {
         printf("No tasks to display.\n");
         return;
     }
 
-    // Sort the tasks using a simple bubble sort algorithm based on titles
     for (int i = 0; i < numTasks - 1; i++) {
         for (int j = 0; j < numTasks - i - 1; j++) {
             if (strcmp(tasks[j].title, tasks[j + 1].title) > 0) {
-                // Swap tasks[j] and tasks[j + 1]
                 struct Task temp;
                 temp = tasks[j];
                 tasks[j] = tasks[j + 1];
@@ -121,18 +113,15 @@ void displayTasksByTitle(struct Task tasks[], int numTasks) {
     }
 }
 
-// Function to display all tasks sorted by deadline
 void displayTasksByDeadline(struct Task tasks[], int numTasks) {
     if (numTasks <= 0) {
         printf("No tasks to display.\n");
         return;
     }
 
-    // Sort the tasks using a simple bubble sort algorithm based on deadlines
     for (int i = 0; i < numTasks - 1; i++) {
         for (int j = 0; j < numTasks - i - 1; j++) {
             if (strcmp(tasks[j].deadline, tasks[j + 1].deadline) > 0) {
-                // Swap tasks[j] and tasks[j + 1]
                 struct Task temp;
                 temp = tasks[j];
                 tasks[j] = tasks[j + 1];
@@ -151,7 +140,7 @@ void displayTasksByDeadline(struct Task tasks[], int numTasks) {
         printf("\n");
     }
 }
-// Function to display tasks with deadlines within 3 days
+
 void displayTasksWithinThreeDays(struct Task tasks[], int numTasks) {
     if (numTasks <= 0) {
         printf("No tasks to display.\n");
@@ -160,23 +149,19 @@ void displayTasksWithinThreeDays(struct Task tasks[], int numTasks) {
 
     printf("Tasks with deadlines within 3 days:\n");
 
-    // Get the current time
     time_t currentTime;
     time(&currentTime);
 
     struct tm* currentTM = localtime(&currentTime);
 
-    // Calculate the current date
     int currentYear = currentTM->tm_year + 1900;
     int currentMonth = currentTM->tm_mon + 1;
     int currentDay = currentTM->tm_mday;
 
-    // Iterate through tasks
     for (int i = 0; i < numTasks; i++) {
         int taskYear, taskMonth, taskDay;
         sscanf(tasks[i].deadline, "%d-%d-%d", &taskYear, &taskMonth, &taskDay);
 
-        // Check if the task's deadline is within 3 days
         if (taskYear < currentYear ||
             (taskYear == currentYear && taskMonth < currentMonth) ||
             (taskYear == currentYear && taskMonth == currentMonth && taskDay <= currentDay + 3)) {
@@ -190,7 +175,6 @@ void displayTasksWithinThreeDays(struct Task tasks[], int numTasks) {
     }
 }
 
-// Function to modify a task by ID
 void modifyTask(struct Task tasks[], int numTasks) {
     int taskId;
     printf("Enter the ID of the task to modify: ");
@@ -198,7 +182,6 @@ void modifyTask(struct Task tasks[], int numTasks) {
 
     int taskIndex = -1;
 
-    // Find the task with the given ID
     for (int i = 0; i < numTasks; i++) {
         if (tasks[i].id == taskId) {
             taskIndex = i;
@@ -211,7 +194,6 @@ void modifyTask(struct Task tasks[], int numTasks) {
 
         printf("Modifying task with ID %d:\n", taskId);
 
-        // Display current task details
         printf("Current Title: %s\n", tasks[taskIndex].title);
         printf("Current Description: %s\n", tasks[taskIndex].description);
         printf("Current Deadline: %s\n", tasks[taskIndex].deadline);
@@ -258,12 +240,12 @@ void modifyTask(struct Task tasks[], int numTasks) {
                         break;
                     default:
                         printf("Invalid choice.\n");
-                        return; // Return without modifying the task
+                        return;
                 }
                 break;
             default:
                 printf("Invalid choice.\n");
-                return; // Return without modifying the task
+                return;
         }
 
         printf("Task with ID %d modified successfully.\n", taskId);
@@ -272,7 +254,6 @@ void modifyTask(struct Task tasks[], int numTasks) {
     }
 }
 
-// Function to delete a task by ID
 int deleteTask(struct Task tasks[], int numTasks) {
     int taskId;
     printf("Enter the ID of the task to delete: ");
@@ -280,7 +261,6 @@ int deleteTask(struct Task tasks[], int numTasks) {
 
     int taskIndex = -1;
 
-    // Find the task with the given ID
     for (int i = 0; i < numTasks; i++) {
         if (tasks[i].id == taskId) {
             taskIndex = i;
@@ -289,20 +269,18 @@ int deleteTask(struct Task tasks[], int numTasks) {
     }
 
     if (taskIndex != -1) {
-        // Shift remaining tasks to fill the gap
         for (int i = taskIndex; i < numTasks - 1; i++) {
             tasks[i] = tasks[i + 1];
         }
 
         printf("Task with ID %d deleted successfully.\n", taskId);
-        return numTasks - 1; // Return the updated task count
+        return numTasks - 1;
     } else {
         printf("Task with ID %d not found.\n", taskId);
         return numTasks;
     }
 }
 
-// Function to search for tasks by ID or title
 void searchTasks(struct Task tasks[], int numTasks) {
     int choice;
     printf("Search by:\n");
@@ -311,7 +289,7 @@ void searchTasks(struct Task tasks[], int numTasks) {
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
-    getchar(); // Consume newline character
+    getchar();
 
     switch (choice) {
         case 1: {
@@ -364,9 +342,8 @@ void searchTasks(struct Task tasks[], int numTasks) {
         default:
             printf("Invalid choice.\n");
     }
-    
 }
-// Function to display statistics about the tasks
+
 void displayStatistics(struct Task tasks[], int numTasks) {
     if (numTasks <= 0) {
         printf("No tasks to display statistics for.\n");
@@ -378,7 +355,6 @@ void displayStatistics(struct Task tasks[], int numTasks) {
     int inProgressTasks = 0;
     int pendingTasks = 0;
 
-    // Count tasks in different statuses
     for (int i = 0; i < numTasks; i++) {
         if (strcmp(tasks[i].status, "Finalisée") == 0) {
             completedTasks++;
@@ -389,12 +365,12 @@ void displayStatistics(struct Task tasks[], int numTasks) {
         }
     }
 
-    // Display the statistics
     printf("Total number of tasks: %d\n", totalTasks);
-    printf("Finalisée2 tasks: %d\n", completedTasks);
+    printf("Finalisée tasks: %d\n", completedTasks);
     printf("Tasks En cours de réalisation: %d\n", inProgressTasks);
     printf("À réaliser tasks: %d\n", pendingTasks);
 }
+
 int main() {
     struct Task tasks[100];
     int numTasks = 0;
@@ -403,7 +379,7 @@ int main() {
     do {
         displayMenu();
         scanf("%d", &choice);
-        getchar(); // Consume newline character
+        getchar();
 
         switch (choice) {
             case 1:
@@ -414,7 +390,7 @@ int main() {
                 printf("Display tasks by:\n");
                 printf("1. Title\n");
                 printf("2. Deadline\n");
-                 printf("2. task within 3 days\n");
+                printf("3. Tasks within 3 days\n");
                 printf("Enter your choice: ");
                 scanf("%d", &displayChoice);
 
@@ -422,17 +398,15 @@ int main() {
                     displayTasksByTitle(tasks, numTasks);
                 } else if (displayChoice == 2) {
                     displayTasksByDeadline(tasks, numTasks);
-                } 
-                else if (displayChoice == 3){
+                } else if (displayChoice == 3) {
                     displayTasksWithinThreeDays(tasks, numTasks);
-                }
-                else {
+                } else {
                     printf("Invalid choice.\n");
                 }
                 break;
             }
             case 3:
-                modifyTask(tasks, numTasks); // Call the modifyTask function
+                modifyTask(tasks, numTasks);
                 break;
             case 4:
                 numTasks = deleteTask(tasks, numTasks);
@@ -441,8 +415,8 @@ int main() {
                 searchTasks(tasks, numTasks);
                 break;
             case 6:
-    displayStatistics(tasks, numTasks);
-    break;
+                displayStatistics(tasks, numTasks);
+                break;
             case 7:
                 printf("Exiting the program. Goodbye!\n");
                 break;
