@@ -151,6 +151,44 @@ void displayTasksByDeadline(struct Task tasks[], int numTasks) {
         printf("\n");
     }
 }
+// Function to display tasks with deadlines within 3 days
+void displayTasksWithinThreeDays(struct Task tasks[], int numTasks) {
+    if (numTasks <= 0) {
+        printf("No tasks to display.\n");
+        return;
+    }
+
+    printf("Tasks with deadlines within 3 days:\n");
+
+    // Get the current time
+    time_t currentTime;
+    time(&currentTime);
+
+    struct tm* currentTM = localtime(&currentTime);
+
+    // Calculate the current date
+    int currentYear = currentTM->tm_year + 1900;
+    int currentMonth = currentTM->tm_mon + 1;
+    int currentDay = currentTM->tm_mday;
+
+    // Iterate through tasks
+    for (int i = 0; i < numTasks; i++) {
+        int taskYear, taskMonth, taskDay;
+        sscanf(tasks[i].deadline, "%d-%d-%d", &taskYear, &taskMonth, &taskDay);
+
+        // Check if the task's deadline is within 3 days
+        if (taskYear < currentYear ||
+            (taskYear == currentYear && taskMonth < currentMonth) ||
+            (taskYear == currentYear && taskMonth == currentMonth && taskDay <= currentDay + 3)) {
+            printf("ID: %d\n", tasks[i].id);
+            printf("Title: %s\n", tasks[i].title);
+            printf("Description: %s\n", tasks[i].description);
+            printf("Deadline: %s\n", tasks[i].deadline);
+            printf("Status: %s\n", tasks[i].status);
+            printf("\n");
+        }
+    }
+}
 
 // Function to modify a task by ID
 void modifyTask(struct Task tasks[], int numTasks) {
@@ -326,8 +364,37 @@ void searchTasks(struct Task tasks[], int numTasks) {
         default:
             printf("Invalid choice.\n");
     }
+    
 }
+// Function to display statistics about the tasks
+void displayStatistics(struct Task tasks[], int numTasks) {
+    if (numTasks <= 0) {
+        printf("No tasks to display statistics for.\n");
+        return;
+    }
 
+    int totalTasks = numTasks;
+    int completedTasks = 0;
+    int inProgressTasks = 0;
+    int pendingTasks = 0;
+
+    // Count tasks in different statuses
+    for (int i = 0; i < numTasks; i++) {
+        if (strcmp(tasks[i].status, "Finalisée") == 0) {
+            completedTasks++;
+        } else if (strcmp(tasks[i].status, "En cours de réalisation") == 0) {
+            inProgressTasks++;
+        } else if (strcmp(tasks[i].status, "À réaliser") == 0) {
+            pendingTasks++;
+        }
+    }
+
+    // Display the statistics
+    printf("Total number of tasks: %d\n", totalTasks);
+    printf("Finalisée2 tasks: %d\n", completedTasks);
+    printf("Tasks En cours de réalisation: %d\n", inProgressTasks);
+    printf("À réaliser tasks: %d\n", pendingTasks);
+}
 int main() {
     struct Task tasks[100];
     int numTasks = 0;
@@ -347,6 +414,7 @@ int main() {
                 printf("Display tasks by:\n");
                 printf("1. Title\n");
                 printf("2. Deadline\n");
+                 printf("2. task within 3 days\n");
                 printf("Enter your choice: ");
                 scanf("%d", &displayChoice);
 
@@ -354,7 +422,11 @@ int main() {
                     displayTasksByTitle(tasks, numTasks);
                 } else if (displayChoice == 2) {
                     displayTasksByDeadline(tasks, numTasks);
-                } else {
+                } 
+                else if (displayChoice == 3){
+                    displayTasksWithinThreeDays(tasks, numTasks);
+                }
+                else {
                     printf("Invalid choice.\n");
                 }
                 break;
@@ -369,8 +441,8 @@ int main() {
                 searchTasks(tasks, numTasks);
                 break;
             case 6:
-                printf("Display statistics: Not implemented yet.\n");
-                break;
+    displayStatistics(tasks, numTasks);
+    break;
             case 7:
                 printf("Exiting the program. Goodbye!\n");
                 break;
